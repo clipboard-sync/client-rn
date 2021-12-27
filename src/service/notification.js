@@ -48,7 +48,7 @@ export default class KeepAliveNotification {
       channelId: 'KeepAlive', // (required) channelId, if the channel doesn't exist, notification will not trigger.
       priority: 'high', // (optional) set notification priority, default: high
       visibility: 'private', // (optional) set notification visibility, default: private
-      ongoing: true, // (optional) set whether this is an "ongoing" notification
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
 
       id: '1',
       title: '剪贴板同步',

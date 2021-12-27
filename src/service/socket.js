@@ -3,8 +3,10 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {ToastAndroid} from 'react-native';
 // import SmsRetriever from 'react-native-android-sms-listener';
 import {aesDecrypt, aesEncrypt, tryCatch} from '../utils/index';
-import Notification from './notification.js';
+// import Notification from './notification.js';
 import {DeviceEventEmitter} from 'react-native';
+import ReactNativeForegroundService from '@supersami/rn-foreground-service';
+
 export default class Socket {
   constructor({
     channel,
@@ -85,7 +87,21 @@ export default class Socket {
   async init() {
     if (this.keepNotification) {
       tryCatch(() => {
-        Notification.createKeepAlive();
+        // Notification.createKeepAlive();
+        ReactNativeForegroundService.add_task(
+          async () => console.log('task - looped'),
+          {
+            delay: 100000000,
+            onLoop: true,
+            taskId: 'keepNotification',
+            onError: e => console.log('Error logging:', e),
+          },
+        );
+        ReactNativeForegroundService.start({
+          id: 144,
+          title: '剪贴板同步',
+          message: '服务运行中',
+        });
       });
     }
     if (this.broadcastNotify) {
@@ -143,7 +159,9 @@ export default class Socket {
 
     if (this.keepNotification) {
       tryCatch(() => {
-        Notification.destoryAll();
+        // Notification.destoryAll();
+        ReactNativeForegroundService.remove_task('keepNotification');
+        ReactNativeForegroundService.stop();
       });
     }
   }

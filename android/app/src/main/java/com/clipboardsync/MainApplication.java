@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.reactlibrary.RNAndroidAppListPackage;
 import com.lesimoes.androidnotificationlistener.RNAndroidNotificationListenerPackage;
 import com.centaurwarchief.smslistener.SmsListenerPackage;
 import me.furtado.smsretriever.RNSmsRetrieverPackage;
