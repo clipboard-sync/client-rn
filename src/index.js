@@ -89,7 +89,7 @@ export default function AppComponent() {
             />
           </View>
           <View style={styles.formItem}>
-            <Text>通知栏保活(推荐)</Text>
+            <Text>通知栏保活</Text>
             <Switch
               onValueChange={val => setState({...state, keepNotification: val})}
               disabled={state.sync}
