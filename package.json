@@ -1,0 +1,37 @@
+{
+  "name": "clipboard-sync",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "build": "cd android && gradlew assembleRelease",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.14",
+    "@react-native-clipboard/clipboard": "^1.9.0",
+    "crypto-js": "^3.1.9-1",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
+    "react-native-android-notification-listener": "^4.0.1",
+    "react-native-android-sms-listener": "^0.8.0",
+    "react-native-push-notification": "^8.1.1",
+    "react-native-sms-retriever": "^1.1.1",
+    "socket.io-client": "^4.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "babel-jest": "^26.6.3",
+    "eslint": "7.14.0",
+    "jest": "^26.6.3",
+    "metro-react-native-babel-preset": "^0.66.2",
+    "react-test-renderer": "17.0.2"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
