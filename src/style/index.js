@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
+  baseText: {
+    fontFamily: '',
+  },
   sendBtn: {
     marginTop: 30,
     marginBottom: 30,
@@ -33,5 +36,52 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
+  },
+  // notifyFilter
+  floatConatiner: {
+    marginTop: 20,
+    width: '90%',
+    marginLeft: '5%',
+  },
+  list: {
+    backgroundColor: '#eeeeee',
+    marginBottom: 20,
+  },
+  appBlock: {
+    flexDirection: 'row',
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#ffffff',
+    flex: 1,
+    marginTop: 5,
+  },
+  notifyBlock: {
+    backgroundColor: '#ffffff',
+    marginTop: 5,
+  },
+  notifyBlockTitle: {
+    flexDirection: 'row',
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  notifyBlockMessage: {
+    height: 40,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  inputItemWhiteList: {
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: '#eeeeee',
+    marginBottom: 20,
+  },
+  saveBtn: {
+    marginBottom: 20,
   },
 });

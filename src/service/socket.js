@@ -6,6 +6,8 @@ import {aesDecrypt, aesEncrypt, tryCatch} from '../utils/index';
 // import Notification from './notification.js';
 import {DeviceEventEmitter} from 'react-native';
 import ReactNativeForegroundService from '@supersami/rn-foreground-service';
+import Store from '../store/index';
+const store = new Store();
 
 export default class Socket {
   constructor({
@@ -72,16 +74,33 @@ export default class Socket {
     });
   }
 
-  NotificationListenner(event) {
+  async NotificationListenner(event) {
     event = JSON.parse(event);
     const {app, title, titleBig, text, subText, summaryText, bigText} = event;
     if (app === 'com.clipboardsync') {
       return;
     }
-    this.sendNotification({
-      title: title || titleBig,
-      text: text || summaryText || subText || bigText,
-    });
+    const notifyTitle = title || titleBig;
+    const notifyText = text || summaryText || subText || bigText;
+
+    const whiteListApps = await store.getValues('@whiteListApps', []);
+    const whiteListLetters = await store.getValues('@whiteListLetters', '');
+
+    console.log('whiteListApps', whiteListApps);
+    console.log('whiteListLetters', whiteListLetters);
+
+    const isInWhiteAppList = whiteListApps.includes(app);
+    const isInWhiteLetterList = whiteListLetters
+      .replace(/[，；。;.]/g, ',')
+      .split(',')
+      .find(item => `${notifyText}${notifyTitle}`.indexOf(item) !== -1);
+
+    if (isInWhiteAppList || isInWhiteLetterList) {
+      this.sendNotification({
+        title: notifyTitle,
+        text: notifyText,
+      });
+    }
   }
 
   async init() {

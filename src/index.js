@@ -8,11 +8,20 @@ import {
   TextInput,
   Text,
   Switch,
+  Modal,
+  TouchableOpacity,
 } from 'react-native';
 import styles from './style';
 import Store from './store/index';
 import ClipSocket from './service/socket';
 import RNAndroidNotificationListener from 'react-native-android-notification-listener';
+
+import NotifyFilter from './components/notifyFilter';
+// import RNAndroidAppList from 'react-native-android-app-list';
+
+// RNAndroidAppList.getAllPermissions().then(data => {
+//   console.log(data);
+// });
 
 // import RNAndroidInstalledApps from 'react-native-android-installed-apps';
 
@@ -38,6 +47,7 @@ export default function AppComponent() {
           keepNotification: false, // 通知栏保活
           broadcastNotify: false,
           sync: false,
+          modalVisible: false,
         },
         config,
       ),
@@ -45,16 +55,35 @@ export default function AppComponent() {
   });
   useEffect(() => {
     store.setValues(state);
+  });
+
+  useEffect(() => {
     if (state.sync) {
       service = new ClipSocket(state);
     } else {
       service && service.destory && service.destory();
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.sync]);
   return (
     <SafeAreaView style={styles.app}>
       <ScrollView>
         <StatusBar barStyle="dark-content" backgroundColor="#efefef" />
+
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={state.modalVisible}
+          onRequestClose={() => {
+            setState({...state, modalVisible: false});
+          }}>
+          <NotifyFilter
+            onClose={() => {
+              setState({...state, modalVisible: false});
+            }}
+          />
+        </Modal>
+
         <View style={styles.container}>
           <Text style={styles.header}>ClipSync</Text>
           <TextInput
@@ -81,7 +110,12 @@ export default function AppComponent() {
             placeholder="密码"
           />
           <View style={styles.formItem}>
-            <Text>显示远程剪贴提示</Text>
+            <Text
+              style={styles.baseText}
+              textBreakStrategy="simple"
+              numberOfLines={0}>
+              显示远程剪贴提示
+            </Text>
             <Switch
               onValueChange={val => setState({...state, showTips: val})}
               disabled={state.sync}
@@ -89,7 +123,12 @@ export default function AppComponent() {
             />
           </View>
           <View style={styles.formItem}>
-            <Text>通知栏保活</Text>
+            <Text
+              style={styles.baseText}
+              textBreakStrategy="simple"
+              numberOfLines={0}>
+              通知栏保活
+            </Text>
             <Switch
               onValueChange={val => setState({...state, keepNotification: val})}
               disabled={state.sync}
@@ -97,16 +136,32 @@ export default function AppComponent() {
             />
           </View>
           <View style={styles.formItem}>
-            <Text>转发本机通知</Text>
+            <Text
+              style={styles.baseText}
+              textBreakStrategy="simple"
+              numberOfLines={0}>
+              转发本机通知
+            </Text>
+            <Button
+              color="#aaaaaa"
+              onPress={() => {
+                setState({...state, modalVisible: true});
+              }}
+              title="白名单配置"
+            />
             <Switch
               onValueChange={async val => {
                 let status =
                   await RNAndroidNotificationListener.getPermissionStatus();
                 console.log(status);
-                if (status === 'authorized') {
+                if (state.broadcastNotify) {
                   setState({...state, broadcastNotify: val});
                 } else {
-                  RNAndroidNotificationListener.requestPermission();
+                  if (status === 'authorized') {
+                    setState({...state, broadcastNotify: val});
+                  } else {
+                    RNAndroidNotificationListener.requestPermission();
+                  }
                 }
               }}
               disabled={state.sync}

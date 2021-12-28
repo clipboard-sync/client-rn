@@ -2,15 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Storage {
   constructor() {}
-  async getValues() {
-    const config = await AsyncStorage.getItem('@systemConfig');
+  async getValues(key = '@systemConfig', def = {}) {
+    const config = await AsyncStorage.getItem(key);
     if (config !== null) {
       return JSON.parse(config);
     } else {
-      return {};
+      return def;
     }
   }
-  async setValues(config) {
-    await AsyncStorage.setItem('@systemConfig', JSON.stringify(config));
+  async setValues(config, key = '@systemConfig') {
+    await AsyncStorage.setItem(key, JSON.stringify(config));
   }
 }
