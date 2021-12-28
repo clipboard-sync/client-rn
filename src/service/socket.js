@@ -91,7 +91,7 @@ export default class Socket {
         ReactNativeForegroundService.add_task(
           async () => console.log('task - looped'),
           {
-            delay: 100000000,
+            delay: 1000 * 60,
             onLoop: true,
             taskId: 'keepNotification',
             onError: e => console.log('Error logging:', e),
