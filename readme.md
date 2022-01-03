@@ -20,7 +20,7 @@ Android： [Github Release](https://github.com/clipboard-sync/client-rn/releases
 点击打开软件
 
 1. 填写服务器地址(以下提供了一些公开的服务)
-    - http://sock.mysocket.online:3000
+    - http://sock.interface.work:3000
 2. 填写 频道（channel），相当于你的用户名，尽量不要与别人重复
 3. 填写 密钥（pwd），用于端到端加密的密码，不会向服务器发送
 4. 通知栏保活：开启前台应用通知栏，防止被杀进程
