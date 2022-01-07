@@ -29,6 +29,8 @@ export default class Socket {
 
     this.initIO();
     this.init();
+
+    this.reconnectTimeout = false; // 是否在重连计时里面
   }
   initIO() {
     const socket = io(this.server, {
@@ -41,14 +43,33 @@ export default class Socket {
 
     socket.on('connect', async () => {
       socket.emit('join', this.channel);
-      ToastAndroid.show('剪贴板连接成功', ToastAndroid.SHORT);
+      if (this.reconnectTimeout !== true) {
+        ToastAndroid.show('剪贴板连接成功', ToastAndroid.SHORT);
+      } else {
+        this.reconnectTimeout = false; //重连成功
+      }
     });
     socket.on('reconnect', () => {
-      ToastAndroid.show('剪贴板重连成功', ToastAndroid.SHORT);
+      if (this.reconnectTimeout !== true) {
+        ToastAndroid.show('剪贴板连接成功', ToastAndroid.SHORT);
+      } else {
+        this.reconnectTimeout = false; //重连成功
+      }
       // 连接断开
     });
     socket.on('disconnect', () => {
-      ToastAndroid.show('剪贴板连接断开', ToastAndroid.SHORT);
+      if (this.distroyed) {
+        ToastAndroid.show('剪贴板连接断开', ToastAndroid.SHORT);
+        return;
+      }
+      this.reconnectTimeout = true;
+      // 五秒内还是true 的话，就不显示
+      setTimeout(() => {
+        if (this.reconnectTimeout === true) {
+          this.reconnectTimeout = false;
+          ToastAndroid.show('剪贴板连接断开', ToastAndroid.SHORT);
+        }
+      }, 5000);
       // 连接断开
     });
     socket.on('data', args => {
@@ -163,6 +184,7 @@ export default class Socket {
   }
 
   destory() {
+    this.distroyed = true;
     if (this.socket && this.socket.connected) {
       tryCatch(() => {
         this.socket.disconnect();
